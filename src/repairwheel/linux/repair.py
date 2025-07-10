@@ -62,6 +62,7 @@ def repair(wheel_file: Path, output_dir: Path, lib_path: List[Path], use_sys_pat
             "repair",
             str(wheel_file),
             "--only-plat",
+            "-L", ".",
             "--plat",
             winfo.sym_tag,
             "--wheel-dir",
