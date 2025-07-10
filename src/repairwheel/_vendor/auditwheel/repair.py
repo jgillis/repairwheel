@@ -61,8 +61,11 @@ def repair_wheel(
         match = WHEEL_INFO_RE(wheel_fname)
         if not match:
             raise ValueError("Failed to parse wheel file name: %s", wheel_fname)
-
-        dest_dir = match.group("name") + lib_sdir
+        
+        if lib_sdir==".":
+            dest_dir = match.group("name")
+        else:
+            dest_dir = match.group("name") + lib_sdir
 
         if not exists(dest_dir):
             os.mkdir(dest_dir)
