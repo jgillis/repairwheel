@@ -55,7 +55,7 @@ def repair(wheel_file: Path, output_dir: Path, lib_path: List[Path], use_sys_pat
 
     excludes = []
     for e in exclude:
-        excludes+=["--exclude", str(e)]
+        excludes+=["--exclude", e]
 
     repair_args = repair_parser.parse_args(
         [
@@ -68,5 +68,15 @@ def repair(wheel_file: Path, output_dir: Path, lib_path: List[Path], use_sys_pat
             str(output_dir),
         ]+excludes
     )
+    print([
+            "repair",
+            str(wheel_file),
+            "--only-plat",
+            "--plat",
+            winfo.sym_tag,
+            "--wheel-dir",
+            str(output_dir),
+        ]+excludes)
+    print(repair_args)
     repair_args.verbose = verbosity
     repair_args.func(repair_args, repair_parser)
