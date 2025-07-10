@@ -23,7 +23,7 @@ def get_machine_from_wheel(wheel: Path) -> str:
     return machine
 
 
-def repair(wheel_file: Path, output_dir: Path, lib_path: List[Path], use_sys_paths: bool, verbosity: int = 0) -> None:
+def repair(wheel_file: Path, output_dir: Path, lib_path: List[Path], use_sys_paths: bool, exclude: List[str], verbosity: int = 0) -> None:
     target_machine = get_machine_from_wheel(wheel_file)
     monkeypatch.apply_auditwheel_patches(target_machine, lib_path, use_sys_paths)
 
@@ -53,6 +53,10 @@ def repair(wheel_file: Path, output_dir: Path, lib_path: List[Path], use_sys_pat
     show_args.verbose = verbosity
     show_args.func(show_args, show_parser)
 
+    excludes = []
+    for e in exclude:
+        excludes+=["--exclude", str(e)]
+
     repair_args = repair_parser.parse_args(
         [
             "repair",
@@ -62,7 +66,7 @@ def repair(wheel_file: Path, output_dir: Path, lib_path: List[Path], use_sys_pat
             winfo.sym_tag,
             "--wheel-dir",
             str(output_dir),
-        ]
+        ]+excludes
     )
     repair_args.verbose = verbosity
     repair_args.func(repair_args, repair_parser)

@@ -29,7 +29,7 @@ def _patch_tools():
     importlib.reload(repairwheel._vendor.delocate.libsana)
 
 
-def repair(wheel: Path, output_path: Path, lib_path: List[Path], use_sys_paths: bool, verbosity: int = 0) -> None:
+def repair(wheel: Path, output_path: Path, lib_path: List[Path], use_sys_paths: bool, exclude: List[str], verbosity: int = 0) -> None:
     _patch_tools()
     from repairwheel._vendor.delocate.delocating import delocate_wheel
 
@@ -50,7 +50,7 @@ def repair(wheel: Path, output_path: Path, lib_path: List[Path], use_sys_paths: 
         out_wheel = output_path / wheel.name
         delocate_wheel(
             in_wheel=wheel,
-            out_wheel=out_wheel,
+            out_wheel=out_wheel
         )
     finally:
         # Restore os.environ
